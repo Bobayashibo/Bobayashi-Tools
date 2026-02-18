@@ -4,7 +4,6 @@
 
 document.addEventListener('DOMContentLoaded', () => {
   initScrollAnimations();
-  initCardTilt();
   initToolsAutomation();
 });
 
@@ -19,10 +18,9 @@ function initToolsAutomation() {
   const wrappers = document.querySelectorAll('.tool-card-wrapper');
   const palette = [
     { primary: '#df5d4b', rgb: '223, 93, 75' },  // Red
-    { primary: '#a2ef44', rgb: '162, 239, 68' },  // Lime
     { primary: '#4a86e8', rgb: '74, 134, 232' }, // Blue
-    { primary: '#f6c48d', rgb: '246, 196, 141' }, // Orange
-    { primary: '#f1b2d3', rgb: '241, 178, 211' }  // Pink
+    { primary: '#f6a23c', rgb: '246, 162, 60' }, // Orange
+    { primary: '#e91e63', rgb: '233, 30, 99' }   // Vivid Pink
   ];
 
   wrappers.forEach((wrapper, index) => {
@@ -40,6 +38,10 @@ function initToolsAutomation() {
 
     // 2. Automatic Coloring (cycle through palette)
     const colorTheme = palette[index % palette.length];
+
+    // Set variables on both wrapper and card for flexibility
+    wrapper.style.setProperty('--card-theme', colorTheme.primary);
+    wrapper.style.setProperty('--card-theme-rgb', colorTheme.rgb);
     card.style.setProperty('--card-theme', colorTheme.primary);
     card.style.setProperty('--card-theme-rgb', colorTheme.rgb);
 
@@ -64,33 +66,4 @@ function initScrollAnimations() {
   });
 
   animItems.forEach(item => observer.observe(item));
-}
-
-/* =============================================
-   Card Tilt Effect
-   ============================================= */
-function initCardTilt() {
-  const cards = document.querySelectorAll('.tool-card');
-
-  cards.forEach(card => {
-    card.addEventListener('mousemove', (e) => {
-      const rect = card.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-
-      const centerX = rect.width / 2;
-      const centerY = rect.height / 2;
-
-      const rotateX = (y - centerY) / 20;
-      const rotateY = (centerX - x) / 20;
-
-      requestAnimationFrame(() => {
-        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-      });
-    });
-
-    card.addEventListener('mouseleave', () => {
-      card.style.transform = '';
-    });
-  });
 }
